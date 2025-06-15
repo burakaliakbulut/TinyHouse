@@ -1,0 +1,23 @@
+﻿@model Review
+
+@{
+    ViewData["Title"] = "Yorum Yap";
+}
+
+<h2 class="text-white">Yorum Yap - @ViewBag.EvAdi</h2>
+
+<form asp-action="YorumYap" method="post">
+    <input type="hidden" asp-for="ReservationId" />
+
+    <div class="mb-3">
+        <label class="form-label text-white">Puan (1-5):</label>
+        <input asp-for="Puan" type="number" min="1" max="5" class="form-control bg-dark text-white border-secondary" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label text-white">Yorum:</label>
+        <textarea asp-for="Yorum" class="form-control bg-dark text-white border-secondary"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Gönder</button>
+</form>

@@ -1,0 +1,31 @@
+﻿@model List<Payment>
+
+@{
+    ViewData["Title"] = "Ödemeler";
+}
+
+<h2 class="text-white">Tüm Ödemeler</h2>
+
+<p class="text-light">Toplam Gelir: <strong>@ViewBag.Toplam.ToString("C")</strong></p>
+
+<table class="table table-dark table-striped border rounded overflow-hidden">
+    <thead>
+        <tr>
+            <th>Ev</th>
+            <th>Kiracı</th>
+            <th>Ödeme Tarihi</th>
+            <th>Tutar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Reservation?.House?.Baslik</td>
+                <td>@p.Reservation?.Kiraci?.UserName</td>
+                <td>@p.OdemeTarihi.ToShortDateString()</td>
+                <td>@p.Tutar.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>

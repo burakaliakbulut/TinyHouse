@@ -1,0 +1,41 @@
+﻿@model List<Reservation>
+
+@{
+    ViewData["Title"] = "Gelen Rezervasyonlar";
+}
+
+<h2 class="text-white">Gelen Rezervasyonlar</h2>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Henüz rezervasyon bulunmuyor.</p>
+}
+else
+{
+    <table class="table table-dark table-striped border rounded overflow-hidden">
+        <thead>
+            <tr>
+                <th>Ev</th>
+                <th>Kiracı</th>
+                <th>Başlangıç</th>
+                <th>Bitiş</th>
+                <th>Durum</th>
+                <th>İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.House.Baslik</td>
+                    <td>@r.Kiraci?.UserName</td>
+                    <td>@r.BaslangicTarihi.ToShortDateString()</td>
+                    <td>@r.BitisTarihi.ToShortDateString()</td>
+                    <td>@r.Durum</td>
+                    <td>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

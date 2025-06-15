@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Bakiye Yükle";
+}
+
+<h2 class="text-white">Bakiye Yükle</h2>
+<p class="text-light">Mevcut Bakiye: <strong>@ViewBag.Bakiye.ToString("C")</strong></p>
+
+<form method="post" class="mb-3">
+    <div class="mb-3">
+        <label class="form-label text-white">Yüklenecek Miktar (₺):</label>
+        <input type="number" name="miktar" step="0.01" class="form-control bg-dark text-white border-secondary" required />
+    </div>
+    <button type="submit" class="btn btn-success">Yükle</button>
+</form>

@@ -1,0 +1,25 @@
+﻿@model UserLoginViewModel
+
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+<h2 class="text-white">Giriş Yap</h2>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+<form asp-action="Login" asp-controller="Account" method="post">
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label text-white"></label>
+        <input asp-for="Email" class="form-control bg-dark text-white border-secondary" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label text-white"></label>
+        <input asp-for="Password" type="password" class="form-control bg-dark text-white border-secondary" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Giriş Yap</button>
+</form>

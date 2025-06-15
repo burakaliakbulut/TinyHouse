@@ -1,0 +1,65 @@
+﻿@model List<Reservation>
+
+@{
+    ViewData["Title"] = "Rezervasyonlarım";
+}
+
+<h2 class="text-white">Rezervasyonlarım</h2>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Hiç rezervasyonunuz bulunmuyor.</p>
+}
+else
+{
+    <table class="table table-dark table-striped border rounded overflow-hidden">
+        <thead>
+            <tr>
+                <th>Ev</th>
+                <th>Başlangıç</th>
+                <th>Bitiş</th>
+                <th>Durum</th>
+                <th>İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.House.Baslik</td>
+                    <td>@r.BaslangicTarihi.ToShortDateString()</td>
+                    <td>@r.BitisTarihi.ToShortDateString()</td>
+                    <td>@r.Durum</td>
+                    <td>
+                        @if (r.Durum == "Bekliyor")
+                        {
+                            <form asp-action="IptalEt" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@r.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">İptal Et</button>
+                            </form>
+                        }
+
+                        @if (r.Durum == "Onaylandi" && r.Yorum == null)
+                        {
+                            <a asp-action="YorumYap" asp-route-rezervasyonId="@r.Id" class="btn btn-warning btn-sm">Yorum Yap</a>
+                        }
+                        else if (r.Yorum != null)
+                        {
+                            <span class="badge bg-secondary">Yorumlandı</span>
+                        }
+                        @if (r.Durum != "Iptal")
+                        {
+                            <form asp-action="IptalEt" asp-controller="House" asp-route-id="@r.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-danger"
+                                        onclick="return confirm('İptal etmek istediğinize emin misiniz?');">
+                                    İptal Et
+                                </button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

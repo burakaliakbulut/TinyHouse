@@ -1,0 +1,34 @@
+﻿@model AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h2 class="text-white">Admin Dashboard</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card bg-dark text-white border-secondary p-3 mb-3">
+            <h4>Kullanıcı Sayısı</h4>
+            <p>@Model.KullaniciSayisi</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark text-white border-secondary p-3 mb-3">
+            <h4>Ev Sayısı</h4>
+            <p>@Model.EvSayisi</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark text-white border-secondary p-3 mb-3">
+            <h4>Rezervasyonlar</h4>
+            <p>@Model.RezervasyonSayisi</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark text-white border-secondary p-3 mb-3">
+            <h4>Toplam Ödeme</h4>
+            <p>@Model.ToplamOdemeTutari.ToString("C")</p>
+        </div>
+    </div>
+</div>

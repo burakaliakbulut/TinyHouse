@@ -1,0 +1,150 @@
+﻿@model House
+
+@{
+    ViewData["Title"] = "Ev Detayı";
+}
+
+<h2 class="text-white">@Model.Baslik</h2>
+
+<p class="text-light">@Model.Aciklama</p>
+<p><strong>Konum:</strong> @Model.Konum</p>
+<p><strong>Fiyat:</strong> @Model.Fiyat ₺</p>
+
+@if (Model.Resimler != null && Model.Resimler.Any())
+{
+    <div id="houseCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
+        <div class="carousel-inner rounded border border-secondary" style="max-height: 400px; overflow: hidden;">
+            @for (int i = 0; i < Model.Resimler.Count; i++)
+            {
+                var resim = Model.Resimler.ToList()[i];
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <img src="@resim.ResimUrl" class="d-block w-100" style="object-fit: cover; height: 400px;" />
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#houseCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Önceki</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#houseCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Sonraki</span>
+        </button>
+    </div>
+}
+
+
+@if ((User.IsInRole("Kiraci") || User.IsInRole("EvSahibi"))
+    && ViewBag.UserId != null
+    && ViewBag.UserId != Model.EvSahibiId)
+{
+    <a asp-action="RezervasyonYap" asp-route-id="@Model.Id" class="btn btn-success mb-4">
+        Rezervasyon Yap
+    </a>
+}
+
+<hr class="border-secondary" />
+
+<h4 class="text-white">Yorumlar</h4>
+
+@if (User.IsInRole("Kiraci") || User.IsInRole("EvSahibi"))
+{
+    <a asp-action="Rezervasyonlarim" asp-controller="House" class="btn btn-outline-warning mb-3">
+        Yorum Yapmak için Rezervasyonlarım
+    </a>
+}
+
+@if (Model.Rezervasyonlar != null && Model.Rezervasyonlar.Any(r => r.Yorum != null))
+{
+    @foreach (var r in Model.Rezervasyonlar.Where(r => r.Yorum != null))
+    {
+        <div class="border border-secondary p-3 mb-2 rounded bg-dark text-white">
+            <strong>Puan:</strong> @r.Yorum.Puan <br />
+            <strong>Yorum:</strong> @r.Yorum.Yorum <br />
+            <small><i>@r.Yorum.Tarih.ToShortDateString()</i></small>
+        </div>
+    }
+}
+else
+{
+    <p class="text-muted">Bu ev için henüz yorum yapılmamış.</p>
+}
+
+<hr class="border-secondary" />
+
+<h5 class="text-white">Ortalama Puan:</h5>
+<p class="text-white">
+    @if (Model.Rezervasyonlar != null && Model.Rezervasyonlar.Any(r => r.Yorum != null))
+    {
+        var ort = Model.Rezervasyonlar
+        .Where(r => r.Yorum != null)
+        .Average(r => r.Yorum.Puan);
+
+        for (int i = 1; i <= 5; i++)
+        {
+            if (i <= Math.Floor(ort))
+            {
+                <span style="color: gold;">★</span>
+            }
+            else
+            {
+                <span style="color: lightgray;">☆</span>
+            }
+        }
+
+        <strong> (@ort.ToString("0.0") / 5)</strong>
+    }
+    else
+    {
+        <i class="text-white">Henüz puan yok</i>
+    }
+    
+
+    <h4 class="text-white">Takvim (Dolu Tarihler)</h4>
+    <div id="takvim" class="bg-white rounded p-2 mb-4"></div>
+
+    @section Scripts {
+        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var calendarEl = document.getElementById('takvim');
+                if (!calendarEl) return;
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    height: 500,
+                    locale: 'tr',
+                    events: [
+                        { title: 'Dolu', start: '2025-06-20', end: '2025-06-22' }
+                    ],
+                    eventColor: 'crimson',
+                    eventTextColor: 'white',
+                    displayEventTime: false
+                });
+
+                calendar.render();
+            });
+        </script>
+    }
+
+
+
+    <style>
+        .fc-event {
+            background-color: crimson !important;
+            border: none !important;
+            height: 100% !important;
+            padding: 0 !important;
+            font-size: 0 !important;
+            line-height: 0 !important;
+        }
+
+        .fc-event-title {
+            display: none !important;
+        }
+    </style>
+</p>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">← Geri</a>

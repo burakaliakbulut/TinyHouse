@@ -1,0 +1,91 @@
+﻿@model List<House>
+
+@{
+    ViewData["Title"] = "Evler";
+}
+
+<form method="get" asp-controller="House" asp-action="Index" class="row g-2 mb-4">
+    <div class="col-md-2">
+        <label class="form-label text-white">Min. Puan</label>
+        <select name="minPuan" class="form-select bg-dark text-white border-secondary">
+            <option value="">Tümü</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+            <option value="4">4+</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label text-white">Max Fiyat (₺)</label>
+        <input type="number" name="maxFiyat" class="form-control bg-dark text-white border-secondary" placeholder="örnek: 5000" />
+    </div>
+
+    <div class="col-md-3">
+        <label class="form-label text-white">Konum</label>
+        <input type="text" name="konum" class="form-control bg-dark text-white border-secondary" placeholder="örn: Manisa" />
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label text-white">Sırala</label>
+        <select name="sirala" class="form-select bg-dark text-white border-secondary">
+            <option value="">Varsayılan</option>
+            <option value="fiyatArtan">En Ucuz</option>
+            <option value="fiyatAzalan">En Pahalı</option>
+            <option value="puanYuksek">En Yüksek Puan</option>
+        </select>
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+    </div>
+</form>
+
+<h2 class="text-white">Tüm Tiny House İlanları</h2>
+
+<div class="row">
+    @foreach (var ev in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card bg-dark text-white border-secondary">
+                @if (ev.Resimler.Any())
+                {
+                    <img src="@ev.Resimler.First().ResimUrl" class="card-img-top" style="height: 200px; object-fit: cover;" />
+                }
+
+
+                <div class="card-body">
+                    <h5 class="card-title">@ev.Baslik</h5>
+                    <p class="card-text">@ev.Konum</p>
+                    <p class="card-text">@ev.Fiyat ₺</p>
+
+                    @if (ev.OrtalamaPuan > 0)
+                    {
+                        <p class="card-text">
+                            Puan:
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= Math.Floor(ev.OrtalamaPuan))
+                                {
+                                    <span style="color: gold;">★</span>
+                                }
+                                else
+                                {
+                                    <span style="color: lightgray;">☆</span>
+                                }
+                            }
+                            <small>(@ev.OrtalamaPuan.ToString("0.0"))</small>
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="card-text"><i>Henüz puan yok</i></p>
+                    }
+
+                    <a asp-action="Details" asp-route-id="@ev.Id" class="btn btn-primary">Detaylar</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

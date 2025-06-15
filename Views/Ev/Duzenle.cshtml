@@ -1,0 +1,37 @@
+﻿@model HouseEkleViewModel
+<h2 class="text-white">Yeni Tiny House Ekle</h2>
+
+@{
+    ViewData["Title"] = "İlanı Düzenle";
+}
+<h2 class="text-white">İlanı Düzenle</h2>
+
+<form asp-action="Duzenle" asp-route-id="@ViewBag.EvId" method="post">
+    <div class="mb-3">
+        <label asp-for="Baslik" class="form-label text-white"></label>
+        <input asp-for="Baslik" class="form-control bg-dark text-white border-secondary" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Aciklama" class="form-label text-white"></label>
+        <textarea asp-for="Aciklama" class="form-control bg-dark text-white border-secondary"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Fiyat" class="form-label text-white"></label>
+        <input asp-for="Fiyat" class="form-control bg-dark text-white border-secondary" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Konum" class="form-label text-white"></label>
+        <input asp-for="Konum" class="form-control bg-dark text-white border-secondary" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label text-white">Ev Fotoğrafları (çoklu):</label>
+        <input asp-for="Resimler" type="file" class="form-control bg-dark text-white border-secondary" multiple />
+    </div>
+
+
+    <button type="submit" class="btn btn-success">Kaydet</button>
+</form>
